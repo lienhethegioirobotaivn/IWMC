@@ -1,18 +1,21 @@
+import { ContactData } from "@/services/contact.service";
 import { Mail, Phone, MapPin, Clock, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { FaFacebook, FaLinkedin, FaYoutube } from "react-icons/fa";
 
-export function ContactForm() {
+type ContactSectionProps = Pick<ContactData, "contact_section">;
+
+export function ContactSection({ contact_section }: ContactSectionProps) {
   return (
     <section className="bg-[#050810] text-white py-6 lg:py-6 px-6 lg:px-12 font-sans">
       <div className="mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6">
+        {/* Left */}
         <div className="lg:col-span-7 bg-[#0b1120]/60 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur-md">
           <h3 className="text-center lg:text-left text-2xl lg:text-3xl font-bold text-white/90 mb-2 uppercase">
-            Gửi thông tin cho chúng tôi
+            {contact_section.left.title}
           </h3>
           <p className="text-center lg:text-left text-sm lg:text-base text-white/60 mb-6">
-            Điền vào biểu mẫu bên dưới và đội ngũ chuyên gia của IWMC sẽ liên hệ
-            với bạn sớm nhất để hỗ trợ.
+            {contact_section.left.description}
           </p>
 
           <form className="space-y-4">
@@ -102,13 +105,14 @@ export function ContactForm() {
           </form>
         </div>
 
+        {/* Right */}
         <div className="lg:col-span-5 bg-[#0b1120]/60 border border-white/10 rounded-2xl p-6 md:p-8 backdrop-blur-md flex flex-col justify-between">
           <div>
             <h3 className="text-center lg:text-left text-2xl lg:text-3xl font-bold text-white/90 mb-2 uppercase">
-              Thông tin liên hệ
+              {contact_section.right.title}
             </h3>
             <p className="text-center lg:text-left text-sm lg:text-base text-white/60 mb-8">
-              Bạn có thể liên hệ với chúng tôi qua các kênh sau:
+              {contact_section.right.description}
             </p>
 
             <div className="space-y-6">
@@ -121,7 +125,7 @@ export function ContactForm() {
                     Địa chỉ
                   </h4>
                   <p className="text-sm text-gray-300">
-                    123 Trương Định, Phường Xuân Hòa, TP. Hồ Chí Minh, Việt Nam
+                    {contact_section.right.address}
                   </p>
                 </div>
               </div>
@@ -134,7 +138,9 @@ export function ContactForm() {
                   <h4 className="text-base font-semibold text-[#d5ad64] uppercase mb-0.5">
                     Điện thoại
                   </h4>
-                  <p className="text-sm text-gray-300">0978 888 278</p>
+                  <p className="text-sm text-gray-300">
+                    {contact_section.right.phone}
+                  </p>
                 </div>
               </div>
 
@@ -146,7 +152,9 @@ export function ContactForm() {
                   <h4 className="text-base font-semibold text-[#d5ad64] uppercase mb-0.5">
                     Email
                   </h4>
-                  <p className="text-sm text-gray-300">info@iwmc.vn</p>
+                  <p className="text-sm text-gray-300">
+                    {contact_section.right.email}
+                  </p>
                 </div>
               </div>
 
@@ -158,10 +166,9 @@ export function ContactForm() {
                   <h4 className="text-base font-semibold text-[#d5ad64] uppercase mb-0.5">
                     Giờ làm việc
                   </h4>
-                  <p className="text-sm text-gray-300">
-                    Thứ 2 - Thứ 6: 8:30 - 17:30
+                  <p className="text-sm text-gray-300 whitespace-pre-wrap">
+                    {contact_section.right.working_hours}
                   </p>
-                  <p className="text-sm text-gray-300">Thứ 7: 8:30 - 12:00</p>
                 </div>
               </div>
             </div>
@@ -173,19 +180,19 @@ export function ContactForm() {
             </span>
             <div className="flex items-center gap-3">
               <Link
-                href="#"
+                href={contact_section.right.link_linkedin}
                 className="p-2 rounded-full bg-[#050810] border border-white/10 text-gray-400 hover:text-[#d5ad64] transition-colors"
               >
                 <FaLinkedin size={18} />
               </Link>
               <Link
-                href="#"
+                href={contact_section.right.link_facebook}
                 className="p-2 rounded-full bg-[#050810] border border-white/10 text-gray-400 hover:text-[#d5ad64] transition-colors"
               >
                 <FaFacebook size={18} />
               </Link>
               <Link
-                href="#"
+                href={contact_section.right.link_youtube}
                 className="p-2 rounded-full bg-[#050810] border border-white/10 text-gray-400 hover:text-[#d5ad64] transition-colors"
               >
                 <FaYoutube size={18} />

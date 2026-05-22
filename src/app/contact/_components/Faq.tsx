@@ -2,32 +2,20 @@
 
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { ContactData } from "@/services/contact.service";
 
-const faqs = [
-  {
-    q: "IWMC cung cấp những dịch vụ gì?",
-    a: "Chúng tôi cung cấp các dịch vụ tư vấn tài chính, IPO & Thị trường vốn, M&A, Quản trị gia sản, và Đào tạo doanh nghiệp.",
-  },
-  {
-    q: "Làm thế nào để bắt đầu hợp tác với IWMC?",
-    a: "Bạn có thể điền biểu mẫu liên hệ trực tiếp cho chúng tôi. Chuyên gia sẽ liên hệ để tư vấn chi tiết.",
-  },
-  {
-    q: "Thời gian phản hồi là bao lâu?",
-    a: "IWMC cam kết phản hồi mọi yêu cầu trong vòng 24 giờ làm việc.",
-  },
-  {
-    q: "Thông tin của tôi có được bảo mật không?",
-    a: "Có, IWMC cam kết bảo mật tuyệt đối mọi thông tin của khách hàng theo chính sách bảo mật của chúng tôi.",
-  },
-];
+type FaqProps = Pick<ContactData, "faq">;
 
-export function Faq() {
+export function Faq({ faq }: FaqProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const halfIndex = Math.ceil(faqs.length / 2);
-  const leftColumn = faqs.slice(0, halfIndex);
-  const rightColumn = faqs.slice(halfIndex);
+  const validQna = faq.qna.filter(
+    (item) => item.question && item.question.trim() !== "",
+  );
+
+  const halfIndex = Math.ceil(validQna.length / 2);
+  const leftColumn = validQna.slice(0, halfIndex);
+  const rightColumn = validQna.slice(halfIndex);
 
   return (
     <>
@@ -35,10 +23,10 @@ export function Faq() {
         <div className="mx-auto">
           <div className="text-center mb-8">
             <h2 className="text-[28px] lg:text-3xl font-bold text-white/90 uppercase mb-2">
-              Câu hỏi thường gặp
+              {faq.title}
             </h2>
             <p className="text-[15px] lg:text-base text-white/60">
-              Dưới đây là một số câu hỏi phổ biến từ khách hàng của chúng tôi.
+              {faq.description}
             </p>
           </div>
 
@@ -55,7 +43,7 @@ export function Faq() {
                       onClick={() => setOpenIndex(isOpen ? null : index)}
                       className="w-full flex items-center justify-between p-5 text-left font-semibold text-base lg:text-lg text-gray-200 hover:text-[#f0debd] transition-colors cursor-pointer"
                     >
-                      <span>{faq.q}</span>
+                      <span>{faq.question}</span>
                       <span className="text-[#d5ad64] shrink-0 ml-4">
                         {isOpen ? <Minus size={18} /> : <Plus size={18} />}
                       </span>
@@ -68,7 +56,7 @@ export function Faq() {
                       }`}
                     >
                       <div className="custom-scrollbar overflow-y-auto max-h-75 md:max-h-96 px-5 pb-5 pt-2 text-sm lg:text-base text-gray-400 bg-[#050810]/30 whitespace-pre-wrap">
-                        <p>{faq.a}</p>
+                        <p>{faq.answer}</p>
                       </div>
                     </div>
                   </div>
@@ -89,7 +77,7 @@ export function Faq() {
                       onClick={() => setOpenIndex(isOpen ? null : actualIndex)}
                       className="w-full flex items-center justify-between p-5 text-left font-semibold text-base lg:text-lg text-gray-200 hover:text-[#f0debd] transition-colors cursor-pointer"
                     >
-                      <span>{faq.q}</span>
+                      <span>{faq.question}</span>
                       <span className="text-[#d5ad64] shrink-0 ml-4">
                         {isOpen ? <Minus size={18} /> : <Plus size={18} />}
                       </span>
@@ -102,7 +90,7 @@ export function Faq() {
                       }`}
                     >
                       <div className="custom-scrollbar overflow-y-auto max-h-75 md:max-h-96 px-5 pb-5 pt-2 text-sm lg:text-base text-gray-400 bg-[#050810]/30 whitespace-pre-wrap">
-                        <p>{faq.a}</p>
+                        <p>{faq.answer}</p>
                       </div>
                     </div>
                   </div>
