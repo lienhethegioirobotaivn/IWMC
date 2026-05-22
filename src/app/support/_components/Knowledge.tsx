@@ -1,7 +1,10 @@
+import { SupportData } from "@/services/support.service";
 import { Check, ArrowRight } from "lucide-react";
 import Image from "next/image";
 
-export function Knowledge() {
+type KnowledgeProps = Pick<SupportData, "knowledge">;
+
+export function Knowledge({ knowledge }: KnowledgeProps) {
   const articles = [
     {
       image: "/support/NewsIcon1.png",
@@ -25,10 +28,10 @@ export function Knowledge() {
       <div className="lg:col-span-7 p-6 border border-white/15 bg-linear-to-br from-[#001020] to-[#0a1a30] rounded-2xl flex flex-col justify-between">
         <div className="mb-6">
           <h2 className="text-[19px] lg:text-2xl font-bold text-[#e5c185] uppercase mb-1">
-            TRUNG TÂM KIẾN THỨC IPO
+            {knowledge.left.title}
           </h2>
           <p className="text-[15px] lg:text-lg text-gray-400">
-            Cập nhật kiến thức và xu hướng mới nhất về thị trường vốn.
+            {knowledge.left.description}
           </p>
         </div>
 
@@ -67,7 +70,7 @@ export function Knowledge() {
       <div className="lg:col-span-5 rounded-2xl border border-white/15 bg-[#040d1a] relative overflow-hidden flex flex-col p-6">
         <div className="absolute inset-0 z-0 opacity-50 pointer-events-none">
           <Image
-            src="/support/KnowledgeRightBg.png"
+            src={knowledge.right.background_image}
             alt="Background Chart"
             fill
             className="object-cover object-bottom-right"
@@ -76,19 +79,14 @@ export function Knowledge() {
 
         <div className="relative z-10">
           <h3 className="text-center lg:text-left text-2xl lg:text-2xl font-bold text-white mb-2 uppercase">
-            SẴN SÀNG CHO HÀNH TRÌNH IPO?
+            {knowledge.right.title}
           </h3>
           <p className="text-[15px] lg:text-base text-gray-200 mb-4">
-            Đội ngũ chuyên gia của IWMC luôn sẵn sàng lắng nghe và cùng bạn xây
-            dựng lộ trình IPO phù hợp nhất.
+            {knowledge.right.description}
           </p>
 
           <div className="space-y-3">
-            {[
-              "Tư vấn 1:1 miễn phí",
-              "Đề xuất lộ trình chi tiết",
-              "Bảo mật tuyệt đối thông tin",
-            ].map((text, i) => (
+            {knowledge.right.content.map((text, i) => (
               <div
                 key={i}
                 className="flex items-center gap-3 text-sm text-gray-200"
