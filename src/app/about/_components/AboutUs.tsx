@@ -1,50 +1,24 @@
+import { AboutData } from "@/services/about.service";
 import Image from "next/image";
 
-export function AboutUs() {
-  const services = [
-    {
-      title: "TƯ VẤN CHIẾN LƯỢC",
-      desc: "Tái cấu trúc & tăng trưởng",
-      icon: "/about/AboutUsIcon1.png",
-    },
-    {
-      title: "QUẢN TRỊ TÀI CHÍNH",
-      desc: "Tối ưu nguồn lực & giá trị",
-      icon: "/about/AboutUsIcon2.png",
-    },
-    {
-      title: "PHÁT TRIỂN CON NGƯỜI",
-      desc: "Xây dựng thế hệ thừa kế bền vững",
-      icon: "/about/AboutUsIcon3.png",
-    },
-  ];
+type AboutUsProps = Pick<AboutData, "about_us">;
 
+export function AboutUs({ about_us }: AboutUsProps) {
   return (
     <section className="py-12 bg-[#050810] text-white">
       <div className="container mx-auto px-8 md:px-12 grid lg:grid-cols-2 gap-12 items-center">
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4 uppercase">
-            CHÚNG TÔI LÀ AI?
+            {about_us.title}
           </h2>
           <div className="w-12 h-[2.5px] bg-[#d5ad64] mb-8" />
-          <div className="space-y-4 opacity-90 text-gray-300 text-base md:text-lg">
-            <p>
-              IWMC là tổ chức tư vấn chuyên sâu trong lĩnh vực tài chính, quản
-              trị doanh nghiệp và phát triển thế hệ kế cận. Chúng tôi kiên trì
-              thực hiện các giá trị cốt lõi từ giai đoạn đại chúng, từng bước
-              chuẩn bị để niêm yết trên UPCoM, HOSE và vươn ra thị trường quốc
-              tế.
-            </p>
-            <p>
-              Với đội ngũ chuyên gia giàu kinh nghiệm và mạng lưới toàn cầu,
-              IWMC mang đến giải pháp toàn diện, giúp doanh nghiệp tối ưu giá
-              trị, quản trị rủi ro và xây dựng di sản trường tồn.
-            </p>
+          <div className="space-y-4 opacity-90 text-gray-300 text-base md:text-lg whitespace-pre-wrap">
+            <p>{about_us.description}</p>
           </div>
         </div>
 
         <div className="space-y-4 w-full">
-          {services.map((item, idx) => (
+          {about_us.stats.map((item, idx) => (
             <div
               key={idx}
               className="flex items-center gap-4 lg:gap-5 p-4 rounded-2xl border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 backdrop-blur-sm"
@@ -62,7 +36,7 @@ export function AboutUs() {
                   {item.title}
                 </h4>
                 <p className="text-[15px] lg:text-base text-gray-400">
-                  {item.desc}
+                  {item.description}
                 </p>
               </div>
             </div>

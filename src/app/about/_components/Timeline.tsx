@@ -1,21 +1,13 @@
-export function Timeline() {
-  const events = [
-    {
-      year: "2008",
-      text: "Thành lập IWMC với sứ mệnh hỗ trợ doanh nghiệp Việt.",
-    },
-    { year: "2012", text: "Mở rộng dịch vụ tư vấn tài chính." },
-    { year: "2016", text: "Đồng hành doanh nghiệp niêm yết UPCoM." },
-    { year: "2020", text: "Hỗ trợ niêm yết trên sàn HOSE." },
-    { year: "2024", text: "Phát triển hệ sinh thái đào tạo toàn diện." },
-    { year: "TƯƠNG LAI", text: "Mở rộng sức ảnh hưởng toàn cầu." },
-  ];
+import { AboutData } from "@/services/about.service";
 
+type TimelineProps = Pick<AboutData, "timeline">;
+
+export function Timeline({ timeline }: TimelineProps) {
   return (
     <section className="py-12 bg-[#050810] overflow-hidden">
       <div className="container mx-auto px-10 lg:px-4">
         <h2 className="text-center text-[28px] lg:text-4xl font-bold text-white mb-10 lg:mb-12 uppercase">
-          HÀNH TRÌNH PHÁT TRIỂN
+          {timeline.title}
         </h2>
 
         <div className="relative flex flex-col lg:flex-row justify-between items-start gap-8 lg:gap-4">
@@ -23,7 +15,7 @@ export function Timeline() {
 
           <div className="hidden lg:block absolute top-3.5 left-18 w-[85%] mx-auto h-px bg-[#d5ad64]/30" />
 
-          {events.map((event, idx) => (
+          {timeline.events.map((event, idx) => (
             <div
               key={idx}
               className="relative z-10 flex flex-row lg:flex-col items-start lg:items-center w-full pl-8 lg:pl-0"
@@ -36,7 +28,7 @@ export function Timeline() {
                     {event.year}
                   </div>
 
-                  {idx !== events.length - 1 && (
+                  {idx !== timeline.events.length - 1 && (
                     <div className="hidden lg:block absolute -right-21 size-4 rounded-full bg-[#d5ad64] shadow-[0_0_15px_rgba(213,173,100,0.5)]" />
                   )}
                 </div>
