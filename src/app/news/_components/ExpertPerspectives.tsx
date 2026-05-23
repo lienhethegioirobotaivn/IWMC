@@ -1,51 +1,52 @@
 "use client";
 
+import { NewsData } from "@/services/news.service";
 import Image from "next/image";
+
+type ExpertPerspectivesProps = Pick<NewsData, "expert_perspectives">;
 
 const EXPERTS = [
   {
-    id: "exp-1",
-    name: "Trần Minh Anh",
-    role: "Tổng Giám đốc IWMC",
+    name: "ThS. Mai Nguyễn Hoàng Nam",
+    role: "Thành viên sáng lập IWMC",
     quote: "Thị trường vốn Việt Nam: Sẵn sàng cho một chu kỳ tăng trưởng mới",
-    avatar: "/news/Avatar.png",
-    date: "15 THÁNG 5, 2024",
+    avatar: "/news/Avatar3.png",
+    date: "15 THÁNG 5, 2026",
   },
   {
-    id: "exp-2",
-    name: "Lê Quang Huy",
-    role: "Giám đốc Tư vấn",
+    name: "ThS. Mai Nguyễn Hoàng Nam",
+    role: "Thành viên sáng lập IWMC",
     quote: "Quản trị rủi ro trong bối cảnh bất định toàn cầu",
-    avatar: "/news/Avatar.png",
-    date: "12 THÁNG 5, 2024",
+    avatar: "/news/Avatar3.png",
+    date: "12 THÁNG 5, 2026",
   },
   {
-    id: "exp-3",
-    name: "Nguyễn Hữu Long",
-    role: "Chủ tịch Hội đồng Quản trị",
+    name: "ThS. Mai Nguyễn Hoàng Nam",
+    role: "Thành viên sáng lập IWMC",
     quote: "Chuyển giao thế hệ: Nghệ thuật của sự trường tồn",
-    avatar: "/news/Avatar.png",
-    date: "08 THÁNG 5, 2024",
+    avatar: "/news/Avatar3.png",
+    date: "08 THÁNG 5, 2026",
   },
 ];
 
-export function ExpertPerspectives() {
+export function ExpertPerspectives({
+  expert_perspectives,
+}: ExpertPerspectivesProps) {
   return (
     <section className="mt-12 border border-white/25 px-6 py-10 rounded-lg">
-      <div className="mb-8">
+      <div className="mb-8 text-center lg:text-left">
         <h2 className="text-3xl font-bold text-[#dfba7d] uppercase mb-1">
-          Góc nhìn IWMC
+          {expert_perspectives.title}
         </h2>
         <p className="text-base text-slate-400">
-          Những phân tích chuyên sâu và góc nhìn độc quyền từ các chuyên gia
-          hàng đầu của IWMC.
+          {expert_perspectives.description}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-4">
-        {EXPERTS.map((expert) => (
+        {EXPERTS.map((expert, index) => (
           <div
-            key={expert.id}
+            key={index}
             className="bg-slate-950/40 border border-white/20 p-4 flex gap-4 items-center rounded-lg hover:border-white/30 transition-colors"
           >
             <div className="relative w-24 h-full shrink-0 rounded-lg overflow-hidden">

@@ -1,7 +1,10 @@
 import { Button, Input } from "@/components/ui";
+import { NewsData } from "@/services/news.service";
 import { Mail } from "lucide-react";
 
-export function Newsletter() {
+type NewsletterProps = Pick<NewsData, "newsletter">;
+
+export function Newsletter({ newsletter }: NewsletterProps) {
   return (
     <section className="container mx-auto px-0 lg:px-8 pb-10">
       <div className="bg-linear-to-br from-[#f9d696] to-[#cfa557] px-12 py-8 lg:rounded-xl flex flex-col md:flex-row items-center justify-between gap-3 lg:gap-6">
@@ -9,10 +12,10 @@ export function Newsletter() {
           <Mail className="text-black size-14 lg:size-16 shrink-0" />
           <div className="flex flex-col">
             <h2 className="pt-2 lg:pt-1 text-3xl lg:text-2xl mb-1 lg:mb-0 font-bold text-[#050810] uppercase">
-              ĐĂNG KÝ NHẬN BẢNG TIN
+              {newsletter.text_1}
             </h2>
             <p className="text-[17px] lg:text-base font-semibold text-[#050810]">
-              Nhận những thông tin và phân tích giá trị mới nhất từ IWMC.
+              {newsletter.text_2}
             </p>
           </div>
         </div>
