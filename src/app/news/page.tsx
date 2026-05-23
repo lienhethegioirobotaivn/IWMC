@@ -105,9 +105,14 @@ export default async function News({
 
       const postsWithViews = await Promise.all(
         posts.map(async (post) => {
+          const wpUrl = process.env.NEXT_PUBLIC_WP_URL;
+          if (!wpUrl) {
+            throw new Error("NEXT_PUBLIC_WP_URL is missing in .env");
+          }
+
           try {
             const viewsRes = await fetch(
-              `${process.env.NEXT_PUBLIC_WP_URL}/wp-json/post-views-counter/get-post-views/${post.id}`,
+              `${wpUrl}/wp-json/post-views-counter/get-post-views/${post.id}`,
               {
                 cache: "no-store",
               },
