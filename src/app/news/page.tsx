@@ -1,24 +1,29 @@
+import { Suspense } from "react";
+
 import {
   Hero,
   CategoryFilter,
-  NewsGrid,
-  Sidebar,
   ExpertPerspectives,
   Newsletter,
-  Pagination,
 } from "@/app/news/_components";
 
 import { getCategories, NewsService } from "@/services/news.service";
 
-export const revalidate = 60;
+import {
+  NewsSection,
+  SidebarSection,
+  NewsGridSkeleton,
+  SidebarSkeleton,
+} from "@/app/news/_components";
 
-const ITEMS_PER_PAGE = 6;
-const SIDEBAR_POSTS_LIMIT = 5;
+export const revalidate = 60;
 
 export default async function News({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{
+    [key: string]: string | string[] | undefined;
+  }>;
 }) {
   const params = await searchParams;
 
@@ -29,12 +34,10 @@ export default async function News({
 
   const currentCategory = categoryParam || "tat-ca";
 
-  const [pageData, categories, mostViewedPosts] = await Promise.all([
+  const [pageData, categories] = await Promise.all([
     NewsService.getData(),
 
     getCategories(),
-
-    NewsService.getMostViewedNews(SIDEBAR_POSTS_LIMIT),
   ]);
 
   if (!pageData) {
@@ -45,33 +48,38 @@ export default async function News({
     (category) => category.slug === categoryParam,
   );
 
-  const { posts: postsToDisplay, totalPages } = await NewsService.getNews({
-    page: currentPage,
-    perPage: ITEMS_PER_PAGE,
-    categoryId: selectedCategory?.id,
-  });
-
   return (
     <main className="min-h-screen bg-[#050810]">
       <Hero hero={pageData.hero} />
+
       <div className="container mx-auto px-4 py-10 md:px-8">
         <CategoryFilter
           currentCategory={currentCategory}
           categories={categories}
         />
+
         <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-7">
           <div className="lg:col-span-5">
-            <NewsGrid posts={postsToDisplay} />
-            <Pagination currentPage={currentPage} totalPages={totalPages} />
+            <Suspense fallback={<NewsGridSkeleton />}>
+              <NewsSection
+                currentPage={currentPage}
+                categoryId={selectedCategory?.id}
+              />
+            </Suspense>
           </div>
+
           <aside className="lg:col-span-2">
-            <Sidebar mostViewedPosts={mostViewedPosts} />
+            <Suspense fallback={<SidebarSkeleton />}>
+              <SidebarSection />
+            </Suspense>
           </aside>
         </div>
+
         <ExpertPerspectives
           expert_perspectives={pageData.expert_perspectives}
         />
       </div>
+
       <Newsletter newsletter={pageData.newsletter} />
     </main>
   );

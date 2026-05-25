@@ -1,4 +1,4 @@
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 import { REST_URL } from "@/lib/env";
 import { transformNews, createNewsQuery } from "@/lib/news";
@@ -40,19 +40,25 @@ const SLUG = "news";
 
 const NEWS_FIELDS = "id,slug,title,acf,date,modified,news-category,post_views";
 
-export const getCategories = cache(async (): Promise<NewsCategory[]> => {
-  try {
-    return await wpFetch<NewsCategory[]>(`${REST_URL}/news-category`, {
-      next: {
-        revalidate: 3600,
-      },
-    });
-  } catch (error) {
-    console.error("Get categories error:", error);
+export const getCategories = unstable_cache(
+  async (): Promise<NewsCategory[]> => {
+    try {
+      return await wpFetch<NewsCategory[]>(`${REST_URL}/news-category`, {
+        next: {
+          revalidate: 3600,
+        },
+      });
+    } catch (error) {
+      console.error("Get categories error:", error);
 
-    return [];
-  }
-});
+      return [];
+    }
+  },
+  ["news-categories"],
+  {
+    revalidate: 3600,
+  },
+);
 
 export const NewsService = {
   async getData(): Promise<NewsData | null> {

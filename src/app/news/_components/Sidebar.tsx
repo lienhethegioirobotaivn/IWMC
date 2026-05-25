@@ -38,7 +38,7 @@ export function Sidebar({ mostViewedPosts }: SidebarProps) {
                 key={post.id}
                 className="grid lg:grid-cols-12 gap-4 group"
               >
-                <div className="lg:col-span-5 relative w-full h-40 lg:h-[76.5px] rounded-md border border-white/10 overflow-hidden">
+                <div className="lg:col-span-5 relative h-40 w-full overflow-hidden rounded-md border border-white/10 lg:h-[76.5px]">
                   <Image
                     src={post.acf.thumbnail_image}
                     alt={post.title.rendered}

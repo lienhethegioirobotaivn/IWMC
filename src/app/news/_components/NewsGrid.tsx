@@ -1,5 +1,3 @@
-"use client";
-
 import type { News } from "@/types/news/news";
 import { decode } from "html-entities";
 
@@ -35,7 +33,7 @@ export function NewsGrid({ posts }: NewsGridProps) {
     };
   };
 
-  const cleanPosts = posts.map(getPostData);
+  const cleanPosts = posts?.map(getPostData) || [];
 
   const featuredPost = cleanPosts[0];
 
