@@ -7,151 +7,59 @@ import {
   Newsletter,
   Pagination,
 } from "@/app/news/_components";
-import { NewsService } from "@/services/news.service";
-import type { News } from "@/types/wordpress";
 
-export const dynamic = "force-dynamic";
+import { getCategories, NewsService } from "@/services/news.service";
+
+export const revalidate = 60;
+
+const ITEMS_PER_PAGE = 6;
+const SIDEBAR_POSTS_LIMIT = 5;
 
 export default async function News({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const pageData = await NewsService.getData();
-  if (!pageData) return null;
-
   const params = await searchParams;
-
-  const REST_URL = process.env.NEXT_PUBLIC_WP_REST_URL;
-  if (!REST_URL) {
-    throw new Error("NEXT_PUBLIC_WP_REST_URL is missing in .env");
-  }
 
   const currentPage = Number(params.page) || 1;
 
-  const currentCategory =
-    typeof params.category === "string"
-      ? decodeURIComponent(params.category)
-      : "Tất cả";
+  const categoryParam =
+    typeof params.category === "string" ? params.category : "";
 
-  const itemPerPage = 6;
+  const currentCategory = categoryParam || "tat-ca";
 
-  async function getNews(): Promise<{
-    posts: News[];
-    totalPages: number;
-  }> {
-    try {
-      const apiUrl = `${REST_URL}/news?_embed&per_page=100`;
+  const [pageData, categories, mostViewedPosts] = await Promise.all([
+    NewsService.getData(),
 
-      const res = await fetch(apiUrl, {
-        cache: "no-store",
-      });
+    getCategories(),
 
-      if (!res.ok) throw new Error("Failed to fetch news");
+    NewsService.getMostViewedNews(SIDEBAR_POSTS_LIMIT),
+  ]);
 
-      const data: News[] = await res.json();
-
-      if (!Array.isArray(data)) {
-        return {
-          posts: [],
-          totalPages: 0,
-        };
-      }
-
-      let filteredNews = data;
-
-      if (currentCategory !== "Tất cả") {
-        filteredNews = data.filter(
-          (post) =>
-            post.acf?.topic?.toLowerCase().trim() ===
-            currentCategory.toLowerCase().trim(),
-        );
-      }
-
-      const totalPages = Math.ceil(filteredNews.length / itemPerPage);
-
-      const startIndex = (currentPage - 1) * itemPerPage;
-      const endIndex = startIndex + itemPerPage;
-
-      return {
-        posts: filteredNews.slice(startIndex, endIndex),
-        totalPages,
-      };
-    } catch (error) {
-      console.error(error);
-
-      return {
-        posts: [],
-        totalPages: 0,
-      };
-    }
+  if (!pageData) {
+    return null;
   }
 
-  async function getMostViewedNews(): Promise<News[]> {
-    try {
-      const postsRes = await fetch(`${REST_URL}/news?_embed&per_page=100`, {
-        cache: "no-store",
-      });
+  const selectedCategory = categories.find(
+    (category) => category.slug === categoryParam,
+  );
 
-      if (!postsRes.ok) {
-        throw new Error("Failed to fetch posts");
-      }
-
-      const posts: News[] = await postsRes.json();
-
-      if (!posts.length) {
-        return [];
-      }
-
-      const postsWithViews = await Promise.all(
-        posts.map(async (post) => {
-          const wpUrl = process.env.NEXT_PUBLIC_WP_URL;
-          if (!wpUrl) {
-            throw new Error("NEXT_PUBLIC_WP_URL is missing in .env");
-          }
-
-          try {
-            const viewsRes = await fetch(
-              `${wpUrl}/wp-json/post-views-counter/get-post-views/${post.id}`,
-              {
-                cache: "no-store",
-              },
-            );
-
-            const viewsData = await viewsRes.json();
-
-            return {
-              ...post,
-              post_views: Number(viewsData || 0),
-            };
-          } catch {
-            return {
-              ...post,
-              post_views: 0,
-            };
-          }
-        }),
-      );
-
-      return postsWithViews
-        .sort((a, b) => (b.post_views || 0) - (a.post_views || 0))
-        .slice(0, 5);
-    } catch (error) {
-      console.error("Sidebar views error:", error);
-
-      return [];
-    }
-  }
-
-  const [{ posts: postsToDisplay, totalPages }, mostViewedPosts] =
-    await Promise.all([getNews(), getMostViewedNews()]);
+  const { posts: postsToDisplay, totalPages } = await NewsService.getNews({
+    page: currentPage,
+    perPage: ITEMS_PER_PAGE,
+    categoryId: selectedCategory?.id,
+  });
 
   return (
     <main className="min-h-screen bg-[#050810]">
       <Hero hero={pageData.hero} />
-      <main className="container mx-auto px-4 md:px-8 py-10">
-        <CategoryFilter currentCategory={currentCategory} />
-        <div className="grid grid-cols-1 lg:grid-cols-7 gap-4 mt-8">
+      <div className="container mx-auto px-4 py-10 md:px-8">
+        <CategoryFilter
+          currentCategory={currentCategory}
+          categories={categories}
+        />
+        <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-7">
           <div className="lg:col-span-5">
             <NewsGrid posts={postsToDisplay} />
             <Pagination currentPage={currentPage} totalPages={totalPages} />
@@ -163,7 +71,7 @@ export default async function News({
         <ExpertPerspectives
           expert_perspectives={pageData.expert_perspectives}
         />
-      </main>
+      </div>
       <Newsletter newsletter={pageData.newsletter} />
     </main>
   );
