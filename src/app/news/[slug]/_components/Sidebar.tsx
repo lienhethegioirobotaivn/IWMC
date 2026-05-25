@@ -1,6 +1,6 @@
 import { Newsletter, InsightsBanner } from "@/app/news/[slug]/_components";
 
-import type { News } from "@/types/wordpress";
+import type { News } from "@/types/news/news";
 import { decode } from "html-entities";
 
 import Image from "next/image";

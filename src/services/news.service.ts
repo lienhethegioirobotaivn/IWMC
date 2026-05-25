@@ -5,7 +5,7 @@ import { transformNews, createNewsQuery } from "@/lib/news";
 import { wpFetch } from "@/lib/wp-fetch";
 import { getACFDataBySlug } from "@/lib/wp-rest-api";
 
-import type { News, NewsCategory, RawNews } from "@/types/wordpress";
+import type { News, NewsCategory, RawNews } from "@/types/news/news";
 
 export interface NewsData {
   hero: {

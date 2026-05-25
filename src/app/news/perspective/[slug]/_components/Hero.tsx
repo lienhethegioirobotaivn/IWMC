@@ -1,16 +1,13 @@
 import { Button } from "@/components/ui";
 
-import { News } from "@/types/news/news";
-import { decode } from "html-entities";
+import { Perspective } from "@/types/news/perspective";
 
 import { ChevronRight } from "lucide-react";
 
 import Image from "next/image";
 import Link from "next/link";
 
-export function Hero({ post }: { post: News }) {
-  const categoryName = decode(post.categories?.[0]?.name || "Tin tức");
-
+export function Hero({ post }: { post: Perspective }) {
   return (
     <section className="relative flex flex-col justify-center overflow-hidden bg-black font-sans">
       <div className="absolute inset-0 z-0">
@@ -49,7 +46,7 @@ export function Hero({ post }: { post: News }) {
             <div className="flex items-center gap-2 text-[#f3d9a9]">
               <ChevronRight className="size-4 shrink-0" />
 
-              <p>{categoryName}</p>
+              <p>Góc nhìn IWMC</p>
             </div>
 
             {post.title.rendered && (
@@ -65,7 +62,7 @@ export function Hero({ post }: { post: News }) {
 
           <div className="mb-2 flex items-center gap-5">
             <Button className="w-fit cursor-pointer rounded-lg bg-[#d5ad64] px-2 py-1 text-xs font-semibold text-black uppercase transition-all duration-200 hover:scale-102 hover:bg-[#c49a50] active:scale-95">
-              {categoryName}
+              Góc nhìn IWMC
             </Button>
 
             <p className="text-sm uppercase">

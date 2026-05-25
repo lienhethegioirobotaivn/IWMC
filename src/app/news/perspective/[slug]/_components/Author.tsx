@@ -1,8 +1,8 @@
-import type { News } from "@/types/news/news";
+import { Perspective } from "@/types/news/perspective";
 import { Check } from "lucide-react";
 import Image from "next/image";
 
-export function Author({ post }: { post: News }) {
+export function Author({ post }: { post: Perspective }) {
   return (
     <div className="flex items-center gap-3 rounded-lg text-white mb-6 px-8 lg:px-12">
       <div className="size-11 lg:size-12 rounded-full overflow-hidden shrink-0 border border-gray-700">

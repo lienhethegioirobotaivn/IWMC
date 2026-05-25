@@ -1,6 +1,12 @@
-import { Author, Content, Hero, Sidebar } from "@/app/news/[slug]/_components";
+import {
+  Author,
+  Content,
+  Hero,
+  PostViewTracker,
+  Sidebar,
+} from "@/app/news/perspective/[slug]/_components";
 
-import { NewsService } from "@/services/news.service";
+import { PerspectiveService } from "@/services/perspective.service";
 
 export const revalidate = 60;
 
@@ -11,20 +17,16 @@ export default async function NewsDetails({
 }) {
   const { slug } = await params;
 
-  const post = await NewsService.getNewsBySlug(slug);
+  const post = await PerspectiveService.getPerspectiveBySlug(slug);
 
   if (!post) {
     return <div>Không tìm thấy bài viết</div>;
   }
 
-  const firstCategoryId = post.categories?.[0]?.id;
-
-  const relatedPosts = firstCategoryId
-    ? await NewsService.getRelatedNews(firstCategoryId, post.id)
-    : [];
-
   return (
     <>
+      <PostViewTracker postId={post.id} />
+
       <main>
         <Hero post={post} />
         <Author post={post} />
@@ -33,7 +35,7 @@ export default async function NewsDetails({
             <Content post={post} />
           </div>
           <aside className="lg:col-span-3">
-            <Sidebar posts={relatedPosts} />
+            <Sidebar />
           </aside>
         </div>
       </main>

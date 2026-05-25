@@ -1,3 +1,4 @@
+export * from "./PostViewTracker";
 export * from "./Hero";
 export * from "./Author";
 export * from "./Content";

@@ -1,6 +1,6 @@
 "use client";
 
-import type { NewsCategory } from "@/types/wordpress";
+import type { NewsCategory } from "@/types/news/news";
 
 import { decode } from "html-entities";
 

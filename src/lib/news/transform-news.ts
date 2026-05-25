@@ -1,4 +1,4 @@
-import type { News, NewsCategory, RawNews } from "@/types/wordpress";
+import type { News, NewsCategory, RawNews } from "@/types/news/news";
 
 export function transformNews(
   posts: RawNews[],

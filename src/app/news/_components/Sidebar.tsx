@@ -1,4 +1,4 @@
-import type { News } from "@/types/wordpress";
+import type { News } from "@/types/news/news";
 import Image from "next/image";
 import Link from "next/link";
 
