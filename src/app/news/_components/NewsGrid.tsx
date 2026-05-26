@@ -1,5 +1,4 @@
-import type { News } from "@/types/news/news";
-import { decode } from "html-entities";
+import type { News } from "@/types/news";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -17,31 +16,13 @@ export function NewsGrid({ posts }: NewsGridProps) {
     );
   }
 
-  const getPostData = (post: News) => {
-    return {
-      title: post.title?.rendered,
-      thumbnail_image: post.acf?.thumbnail_image || "",
-      description: post.acf?.description || "Chưa có mô tả ngắn",
-      category: decode(post.categories?.[0]?.name || "Tin tức"),
-      date: new Date(post.date).toLocaleDateString("vi-VN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }),
-
-      slug: post.slug,
-    };
-  };
-
-  const cleanPosts = posts?.map(getPostData) || [];
-
-  const featuredPost = cleanPosts[0];
+  const featuredPost = posts[0];
 
   if (!featuredPost) return null;
 
-  const recentPosts = cleanPosts.slice(1, 3);
+  const recentPosts = posts.slice(1, 3);
 
-  const gridPosts = cleanPosts.slice(3, 6);
+  const gridPosts = posts.slice(3, 6);
 
   return (
     <div className="space-y-6">
@@ -53,12 +34,15 @@ export function NewsGrid({ posts }: NewsGridProps) {
             </p>
           </div>
 
-          <Link href={`/news/${featuredPost.slug}`}>
+          <Link href={`/news/${featuredPost.slug}`} prefetch={false}>
             <div className="relative aspect-video w-full overflow-hidden">
               <Image
-                src={featuredPost.thumbnail_image}
+                src={featuredPost.thumbnail}
                 alt={featuredPost.title}
                 fill
+                priority
+                unoptimized
+                sizes="(max-width: 768px) 100vw, 66vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
@@ -77,7 +61,7 @@ export function NewsGrid({ posts }: NewsGridProps) {
               </span>
             </div>
 
-            <Link href={`/news/${featuredPost.slug}`}>
+            <Link href={`/news/${featuredPost.slug}`} prefetch={false}>
               <h2 className="mb-3 line-clamp-2 text-xl font-bold text-slate-100 transition-colors group-hover:text-[#f3d9a9] md:text-2xl">
                 {featuredPost.title}
               </h2>
@@ -85,13 +69,6 @@ export function NewsGrid({ posts }: NewsGridProps) {
               <p className="mb-4 line-clamp-2 text-sm text-slate-400">
                 {featuredPost.description}
               </p>
-
-              <div className="group/btn inline-flex items-center text-xs font-semibold text-[#a88244] transition-colors hover:text-[#f3d9a9]">
-                Đọc thêm
-                <span className="ml-2 transition-transform group-hover/btn:translate-x-1">
-                  →
-                </span>
-              </div>
             </Link>
           </div>
         </div>
@@ -99,15 +76,17 @@ export function NewsGrid({ posts }: NewsGridProps) {
         <div className="flex flex-col justify-between space-y-6">
           {recentPosts.map((post) => (
             <div
-              key={post.title}
+              key={post.id}
               className="group flex flex-col justify-between overflow-hidden rounded-lg border border-white/20 bg-slate-950/40"
             >
-              <Link href={`/news/${post.slug}`}>
+              <Link href={`/news/${post.slug}`} prefetch={false}>
                 <div className="relative mb-3 h-45 w-full overflow-hidden lg:mb-1 lg:h-33.5">
                   <Image
-                    src={post.thumbnail_image}
+                    src={post.thumbnail}
                     alt={post.title}
                     fill
+                    unoptimized
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-104"
                   />
                 </div>
@@ -124,17 +103,10 @@ export function NewsGrid({ posts }: NewsGridProps) {
                   </span>
                 </div>
 
-                <Link href={`/news/${post.slug}`}>
+                <Link href={`/news/${post.slug}`} prefetch={false}>
                   <h3 className="line-clamp-2 text-sm font-bold text-slate-200 transition-colors group-hover:text-[#f3d9a9]">
                     {post.title}
                   </h3>
-
-                  <div className="group/btn inline-flex items-center text-xs font-semibold text-[#a88244] transition-colors hover:text-[#f3d9a9]">
-                    Đọc thêm
-                    <span className="ml-2 transition-transform group-hover/btn:translate-x-1">
-                      →
-                    </span>
-                  </div>
                 </Link>
               </div>
             </div>
@@ -145,15 +117,17 @@ export function NewsGrid({ posts }: NewsGridProps) {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-6">
         {gridPosts.map((post) => (
           <div
-            key={post.title}
+            key={post.id}
             className="group flex flex-col justify-between overflow-hidden rounded-lg border border-white/20 bg-slate-950/40"
           >
-            <Link href={`/news/${post.slug}`}>
+            <Link href={`/news/${post.slug}`} prefetch={false}>
               <div className="relative mb-3 h-45 w-full overflow-hidden lg:mb-1 lg:h-32.5">
                 <Image
-                  src={post.thumbnail_image}
+                  src={post.thumbnail}
                   alt={post.title}
                   fill
+                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
@@ -170,17 +144,10 @@ export function NewsGrid({ posts }: NewsGridProps) {
                 </span>
               </div>
 
-              <Link href={`/news/${post.slug}`}>
+              <Link href={`/news/${post.slug}`} prefetch={false}>
                 <h3 className="mb-3 line-clamp-2 text-sm font-bold text-slate-200 transition-colors group-hover:text-[#f3d9a9]">
                   {post.title}
                 </h3>
-
-                <div className="group/btn inline-flex items-center text-[11px] font-semibold text-[#a88244] transition-colors hover:text-[#f3d9a9]">
-                  Đọc thêm
-                  <span className="ml-2 transition-transform group-hover/btn:translate-x-1">
-                    →
-                  </span>
-                </div>
               </Link>
             </div>
           </div>

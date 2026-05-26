@@ -36,17 +36,16 @@ export interface RawNews {
 
 export interface News {
   id: number;
-  date: string;
-  modified: string;
   slug: string;
-
-  title: {
-    rendered: string;
-  };
-
-  categories: NewsCategory[];
-
-  acf: NewsACF;
-
-  post_views?: number;
+  title: string;
+  thumbnail: string;
+  description: string;
+  content?: string;
+  category: string;
+  categorySlug?: string;
+  categoryId?: number;
+  date: string;
+  rawDate: string;
+  author?: NewsAuthor;
+  views?: number;
 }

@@ -38,7 +38,7 @@ interface GetNewsResponse {
 
 const SLUG = "news";
 
-const NEWS_FIELDS = "id,slug,title,acf,date,modified,news-category,post_views";
+const NEWS_FIELDS = "id,slug,title,acf,date,news-category,post_views";
 
 export const getCategories = unstable_cache(
   async (): Promise<NewsCategory[]> => {

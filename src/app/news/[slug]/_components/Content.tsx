@@ -9,7 +9,7 @@ export function Content({ post }: { post: News }) {
           <section className="prose prose-invert max-w-none">
             <div className="w-full mb-6">
               <Image
-                src={post.acf.thumbnail_image}
+                src={post.thumbnail}
                 alt="Thumbnail Image"
                 width={1200}
                 height={700}
@@ -31,7 +31,7 @@ export function Content({ post }: { post: News }) {
                 [&_img]:rounded-2xl
                 [&_img]:object-cover"
               dangerouslySetInnerHTML={{
-                __html: post.acf?.content || "",
+                __html: post.content || "",
               }}
             />
           </section>

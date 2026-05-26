@@ -1,8 +1,5 @@
 import { Newsletter, InsightsBanner } from "@/app/news/[slug]/_components";
-
 import type { News } from "@/types/news/news";
-import { decode } from "html-entities";
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -39,8 +36,8 @@ export function Sidebar({ posts }: SidebarProps) {
               >
                 <div className="relative h-40 w-full overflow-hidden rounded-md border border-white/10 lg:col-span-5 lg:h-[76.5px]">
                   <Image
-                    src={post.acf.thumbnail_image}
-                    alt={post.title.rendered}
+                    src={post.thumbnail}
+                    alt={post.title}
                     fill
                     className="object-cover"
                   />
@@ -48,25 +45,15 @@ export function Sidebar({ posts }: SidebarProps) {
 
                 <div className="space-y-1 text-[#b9934b] lg:col-span-7">
                   <div className="flex items-start gap-2 text-[12px] uppercase lg:gap-1 lg:text-[9px]">
-                    <p className="shrink-0 whitespace-nowrap">
-                      {new Date(post.date).toLocaleDateString("vi-VN", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </p>
+                    <p className="shrink-0 whitespace-nowrap">{post.date}</p>
 
                     <p className="shrink-0">|</p>
 
-                    <p className="min-w-0 wrap-break-word">
-                      {post.categories
-                        ?.map((category) => decode(category.name))
-                        .join(", ")}
-                    </p>
+                    <p className="min-w-0 wrap-break-word">{post.category}</p>
                   </div>
 
                   <h4 className="line-clamp-2 text-[14.5px] font-semibold text-slate-300 transition-colors group-hover:text-[#dfba7d] lg:text-[14px]">
-                    {post.title.rendered}
+                    {post.title}
                   </h4>
                 </div>
               </Link>

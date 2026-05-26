@@ -3,7 +3,6 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { HomeData } from "@/services/home.service";
 import { News as NewsType } from "@/types/news";
-import { decode } from "html-entities";
 
 type NewsProps = Pick<HomeData, "news"> & {
   posts: NewsType[];
@@ -30,8 +29,8 @@ export function News({ news, posts }: NewsProps) {
             >
               <div className="aspect-video relative mb-6 overflow-hidden rounded-lg border border-white/10">
                 <Image
-                  src={item.acf.thumbnail_image}
-                  alt={item.title.rendered}
+                  src={item.thumbnail}
+                  alt={item.title}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -39,23 +38,19 @@ export function News({ news, posts }: NewsProps) {
 
               <div className="flex justify-between items-center mb-6">
                 <span className="px-3 py-1 bg-[#d5ad64] border border-[#d5ad64]/30 rounded text-xs font-bold text-black">
-                  {decode(item.categories?.[0]?.name || "Tin tức")}
+                  {item.category}
                 </span>
                 <span className="text-[10px] text-white/60 font-semibold uppercase">
-                  {new Date(item.date).toLocaleDateString("vi-VN", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
+                  {item.date}
                 </span>
               </div>
 
               <h3 className="text-sm font-bold mb-4 group-hover:text-[#d5ad64] transition-colors uppercase leading-relaxed min-h-10 line-clamp-2">
-                {item.title.rendered}
+                {item.title}
               </h3>
 
               <p className="text-xs text-white/60 leading-relaxed line-clamp-2">
-                {item.acf.description}
+                {item.description}
               </p>
             </Link>
           ))}

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui";
 
 import { News } from "@/types/news/news";
-import { decode } from "html-entities";
 
 import { ChevronRight } from "lucide-react";
 
@@ -9,8 +8,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 export function Hero({ post }: { post: News }) {
-  const categoryName = decode(post.categories?.[0]?.name || "Tin tức");
-
   return (
     <section className="relative flex flex-col justify-center overflow-hidden bg-black font-sans">
       <div className="absolute inset-0 z-0">
@@ -49,15 +46,15 @@ export function Hero({ post }: { post: News }) {
             <div className="flex items-center gap-2 text-[#f3d9a9]">
               <ChevronRight className="size-4 shrink-0" />
 
-              <p>{categoryName}</p>
+              <p>{post.category}</p>
             </div>
 
-            {post.title.rendered && (
+            {post.title && (
               <div className="flex shrink-0 items-center gap-2">
                 <ChevronRight className="size-4 shrink-0 text-[#f3d9a9]" />
 
                 <Link href={post.slug}>
-                  <p className="text-gray-300">{post.title.rendered}</p>
+                  <p className="text-gray-300">{post.title}</p>
                 </Link>
               </div>
             )}
@@ -65,24 +62,18 @@ export function Hero({ post }: { post: News }) {
 
           <div className="mb-2 flex items-center gap-5">
             <Button className="w-fit cursor-pointer rounded-lg bg-[#d5ad64] px-2 py-1 text-xs font-semibold text-black uppercase transition-all duration-200 hover:scale-102 hover:bg-[#c49a50] active:scale-95">
-              {categoryName}
+              {post.category}
             </Button>
 
-            <p className="text-sm uppercase">
-              {new Date(post.date).toLocaleDateString("vi-VN", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </p>
+            <p className="text-sm uppercase">{post.date}</p>
           </div>
 
           <h2 className="mb-4 text-[32px] font-bold text-white lg:mb-3 lg:w-190 lg:text-[36px] lg:leading-11">
-            {post.title.rendered}
+            {post.title}
           </h2>
 
           <p className="text-base text-gray-200 opacity-95 md:text-[18px] lg:w-190 lg:text-gray-300">
-            {post.acf.description}
+            {post.description}
           </p>
         </div>
       </div>

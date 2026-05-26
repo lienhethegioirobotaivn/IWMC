@@ -1,14 +1,41 @@
-import { Author, Content, Hero, Sidebar } from "@/app/news/[slug]/_components";
+import {
+  Author,
+  Content,
+  Hero,
+  PostViewTracker,
+  Sidebar,
+} from "@/app/news/[slug]/_components";
 
 import { NewsService } from "@/services/news.service";
+import { Metadata } from "next";
 
 export const revalidate = 60;
 
-export default async function NewsDetails({
-  params,
-}: {
+type Props = {
   params: Promise<{ slug: string }>;
-}) {
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await NewsService.getNewsBySlug(slug);
+  if (!post) {
+    return {
+      title: "IWMC",
+    };
+  }
+
+  return {
+    title: post.title,
+    description: post.description,
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      images: post.thumbnail ? [{ url: post.thumbnail }] : [],
+    },
+  };
+}
+
+export default async function NewsDetails({ params }: Props) {
   const { slug } = await params;
 
   const post = await NewsService.getNewsBySlug(slug);
@@ -16,8 +43,7 @@ export default async function NewsDetails({
   if (!post) {
     return <div>Không tìm thấy bài viết</div>;
   }
-
-  const firstCategoryId = post.categories?.[0]?.id;
+  const firstCategoryId = post.categoryId;
 
   const relatedPosts = firstCategoryId
     ? await NewsService.getRelatedNews(firstCategoryId, post.id)
@@ -25,6 +51,8 @@ export default async function NewsDetails({
 
   return (
     <>
+      <PostViewTracker postId={post.id} />
+
       <main>
         <Hero post={post} />
         <Author post={post} />

@@ -26,7 +26,7 @@ export function Sidebar({ mostViewedPosts }: SidebarProps) {
         </h3>
         <div className="space-y-8 lg:space-y-4">
           {mostViewedPosts.map((post) => {
-            const viewsCount = Number(post.post_views) || 0;
+            const viewsCount = Number(post.views) || 0;
             const formattedViews =
               viewsCount >= 1000
                 ? `${(viewsCount / 1000).toFixed(1)}K lượt xem`
@@ -40,15 +40,15 @@ export function Sidebar({ mostViewedPosts }: SidebarProps) {
               >
                 <div className="lg:col-span-5 relative h-40 w-full overflow-hidden rounded-md border border-white/10 lg:h-[76.5px]">
                   <Image
-                    src={post.acf.thumbnail_image}
-                    alt={post.title.rendered}
+                    src={post.thumbnail}
+                    alt={post.title}
                     fill
                     className="object-cover"
                   />
                 </div>
                 <div className="lg:col-span-7 space-y-1">
                   <h4 className="text-[14.5px] lg:text-[14px] font-semibold text-slate-300 group-hover:text-[#dfba7d] transition-colors line-clamp-2">
-                    {post.title.rendered}
+                    {post.title}
                   </h4>
                   <span className="text-[13px] lg:text-[12px] text-slate-500 block">
                     {formattedViews}
