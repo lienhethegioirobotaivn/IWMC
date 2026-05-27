@@ -5,7 +5,6 @@ import {
   PostViewTracker,
   Sidebar,
 } from "@/app/news/[slug]/_components";
-
 import { NewsService } from "@/services/news.service";
 import { Metadata } from "next";
 
@@ -18,11 +17,14 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await NewsService.getNewsBySlug(slug);
+
   if (!post) {
     return {
       title: "IWMC",
     };
   }
+
+  const imageUrl = post.thumbnail || null;
 
   return {
     title: post.title,
@@ -30,7 +32,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: post.title,
       description: post.description,
-      images: post.thumbnail ? [{ url: post.thumbnail }] : [],
+      type: "article",
+      images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630 }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: imageUrl ? [imageUrl] : [],
     },
   };
 }
